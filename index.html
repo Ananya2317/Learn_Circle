@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnCircle - Collaborative Learning Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 28px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .points-badge {
+            background: #667eea;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+        .btn-secondary {
+            background: #48bb78;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #f56565;
+            color: white;
+        }
+
+        .auth-forms {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 500px;
+            margin: 50px auto;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s;
+            background: #f7fafc;
+        }
+
+        .tab:hover {
+            background: #e2e8f0;
+        }
+
+        .tab.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .circles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .circle-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .circle-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .circle-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .circle-card .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .tag {
+            background: #e6f0ff;
+            color: #667eea;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .resource-item {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-item {
+            background: #fff5f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .task-item.completed {
+            background: #f0fff4;
+            border-left: 4px solid #48bb78;
+        }
+
+        .search-bar {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .profile-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: #e6f0ff;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-card h4 {
+            color: #667eea;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .chat-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            max-height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .messages-list {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            max-height: 400px;
+        }
+
+        .message {
+            background: #f7fafc;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .message strong {
+            color: #667eea;
+        }
+
+        .comment-item {
+            background: #f7fafc;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .circle-tab-content {
+            margin-top: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .reputation-level {
+            display: inline-block;
+            background: gold;
+            color: #333;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🎓 LearnCircle</h1>
+            <div class="user-info" id="userInfo"></div>
+        </div>
+
+        <!-- Auth Forms -->
+        <div id="authSection">
+            <div class="auth-forms">
+                <h2 style="margin-bottom: 20px; color: #667eea;">Welcome to LearnCircle</h2>
+                
+                <div class="tabs">
+                    <div class="tab active" onclick="switchAuthTab('login')">Login</div>
+                    <div class="tab" onclick="switchAuthTab('register')">Register</div>
+                </div>
+
+                <!-- Login Form -->
+                <div id="loginForm" class="auth-form">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="loginUsername" placeholder="Enter username">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="loginPassword" placeholder="Enter password">
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%;" onclick="login()">Login</button>
+                </div>
+
+                <!-- Register Form -->
+                <div id="registerForm" class="auth-form hidden">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="regUsername" placeholder="Choose username">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="regEmail" placeholder="Enter email">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="regPassword" placeholder="Choose password">
+                    </div>
+                    <div class="form-group">
+                        <label>Role</label>
+                        <select id="regRole">
+                            <option value="student">Student</option>
+                            <option value="creator">Circle Creator</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%;" onclick="register()">Register</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div id="mainContent" class="hidden">
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('discover')">Discover Circles</div>
+                <div class="tab" onclick="switchTab('myCircles')">My Circles</div>
+                <div class="tab" onclick="switchTab('profile')">Profile</div>
+                <div class="tab" id="createTab" onclick="switchTab('create')">Create Circle</div>
+            </div>
+
+            <!-- Discover Circles -->
+            <div id="discoverSection" class="content-section active">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search circles by title, tags, or keywords..." onkeyup="searchCircles()">
+                </div>
+                <div class="circles-grid" id="circlesGrid"></div>
+            </div>
+
+            <!-- My Circles -->
+            <div id="myCirclesSection" class="content-section">
+                <h2 style="color: white; margin-bottom: 20px;">My Circles</h2>
+                <div class="circles-grid" id="myCirclesGrid"></div>
+            </div>
+
+            <!-- Profile -->
+            <div id="profileSection" class="content-section">
+                <div class="profile-section">
+                    <h2 style="color: #667eea; margin-bottom: 20px;">My Profile</h2>
+                    <div id="profileInfo"></div>
+                </div>
+            </div>
+
+            <!-- Create Circle -->
+            <div id="createSection" class="content-section">
+                <div class="auth-forms" style="margin: 0;">
+                    <h2 style="margin-bottom: 20px; color: #667eea;">Create New Circle</h2>
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" id="circleTitle" placeholder="Circle title">
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="circleDesc" placeholder="Describe your circle..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Tags (comma separated)</label>
+                        <input type="text" id="circleTags" placeholder="e.g. python, programming, beginner">
+                    </div>
+                    <div class="form-group">
+                        <label>Privacy</label>
+                        <select id="circlePrivacy">
+                            <option value="public">Public</option>
+                            <option value="private">Private</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%;" onclick="createCircle()">Create Circle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Circle Detail Modal -->
+    <div id="circleModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalCircleTitle" style="color: #667eea; margin-bottom: 20px;"></h2>
+            <div id="modalCircleContent"></div>
+            <button class="btn btn-danger" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+        let currentCircle = null;
+
+        // Auth Functions
+        function switchAuthTab(tab) {
+            const tabs = document.querySelectorAll('.auth-form');
+            tabs.forEach(t => t.classList.add('hidden'));
+            
+            if (tab === 'login') {
+                document.getElementById('loginForm').classList.remove('hidden');
+            } else {
+                document.getElementById('registerForm').classList.remove('hidden');
+            }
+            
+            document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        async function register() {
+            const username = document.getElementById('regUsername').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const role = document.getElementById('regRole').value;
+
+            const response = await fetch('/api/register', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({username, email, password, role})
+            });
+
+            if (response.ok) {
+                alert('Registration successful! Please login.');
+                switchAuthTab('login');
+            } else {
+                const error = await response.json();
+                alert(error.error);
+            }
+        }
+
+        async function login() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            const response = await fetch('/api/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({username, password})
+            });
+
+            if (response.ok) {
+                currentUser = await response.json();
+                showMainContent();
+                loadCircles();
+            } else {
+                alert('Invalid credentials');
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('authSection').classList.remove('hidden');
+            document.getElementById('mainContent').classList.add('hidden');
+        }
+
+        function showMainContent() {
+            document.getElementById('authSection').classList.add('hidden');
+            document.getElementById('mainContent').classList.remove('hidden');
+            
+            // Show/hide create tab based on role
+            if (currentUser.role === 'creator') {
+                document.getElementById('createTab').style.display = 'block';
+            } else {
+                document.getElementById('createTab').style.display = 'none';
+            }
+            
+            updateUserInfo();
+        }
+
+        function updateUserInfo() {
+            const userInfo = document.getElementById('userInfo');
+            userInfo.innerHTML = `
+                <span class="reputation-level">Level ${currentUser.reputation_level}</span>
+                <span class="points-badge">⭐ ${currentUser.points} points</span>
+                <span style="color: white; font-weight: bold;">${currentUser.username}</span>
+                <button class="btn btn-danger" onclick="logout()">Logout</button>
+            `;
+        }
+
+        // Tab Switching
+        function switchTab(tab) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (tab === 'discover') {
+                document.getElementById('discoverSection').classList.add('active');
+                loadCircles();
+            } else if (tab === 'myCircles') {
+                document.getElementById('myCirclesSection').classList.add('active');
+                loadMyCircles();
+            } else if (tab === 'profile') {
+                document.getElementById('profileSection').classList.add('active');
+                loadProfile();
+            } else if (tab === 'create') {
+                document.getElementById('createSection').classList.add('active');
+            }
+        }
+
+        // Circles Functions
+        async function loadCircles() {
+            const response = await fetch('/api/circles');
+            const circles = await response.json();
+            
+            const grid = document.getElementById('circlesGrid');
+            grid.innerHTML = circles.map(circle => `
+                <div class="circle-card" onclick="openCircle(${circle.id})">
+                    <h3>${circle.title}</h3>
+                    <p>${circle.description.substring(0, 100)}...</p>
+                    <p style="color: #666; font-size: 12px; margin-top: 10px;">
+                        By ${circle.creator_username} • ${circle.member_count} members
+                    </p>
+                    <div class="tags">
+                        ${circle.tags.split(',').map(tag => `<span class="tag">${tag.trim()}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function searchCircles() {
+            const search = document.getElementById('searchInput').value;
+            const response = await fetch(`/api/circles?search=${search}`);
+            const circles = await response.json();
+            
+            const grid = document.getElementById('circlesGrid');
+            grid.innerHTML = circles.map(circle => `
+                <div class="circle-card" onclick="openCircle(${circle.id})">
+                    <h3>${circle.title}</h3>
+                    <p>${circle.description.substring(0, 100)}...</p>
+                    <p style="color: #666; font-size: 12px; margin-top: 10px;">
+                        By ${circle.creator_username} • ${circle.member_count} members
+                    </p>
+                    <div class="tags">
+                        ${circle.tags.split(',').map(tag => `<span class="tag">${tag.trim()}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function createCircle() {
+            const title = document.getElementById('circleTitle').value;
+            const description = document.getElementById('circleDesc').value;
+            const tags = document.getElementById('circleTags').value;
+            const privacy = document.getElementById('circlePrivacy').value;
+
+            const response = await fetch('/api/circles', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    title, description, tags, privacy,
+                    creator_id: currentUser.id
+                })
+            });
+
+            if (response.ok) {
+                alert('Circle created successfully!');
+                document.getElementById('circleTitle').value = '';
+                document.getElementById('circleDesc').value = '';
+                document.getElementById('circleTags').value = '';
+                switchTab('myCircles');
+            }
+        }
+
+        async function openCircle(circleId) {
+            const response = await fetch(`/api/circles/${circleId}`);
+            currentCircle = await response.json();
+            
+            // Check if user is member or follower
+            const memberResponse = await fetch(`/api/circles/${circleId}/membership?user_id=${currentUser.id}`);
+            const membershipData = await memberResponse.json();
+            
+            const modal = document.getElementById('circleModal');
+            document.getElementById('modalCircleTitle').textContent = currentCircle.title;
+            
+            let actionButtons = '';
+            if (membershipData.is_member) {
+                actionButtons = '<span style="color: #48bb78; font-weight: bold;">✓ Joined</span>';
+            } else {
+                actionButtons = `<button class="btn btn-primary" onclick="joinCircle(${circleId})">Join Circle</button>`;
+            }
+            
+            if (membershipData.is_following) {
+                actionButtons += ' <button class="btn btn-danger" onclick="unfollowCircle(${circleId})">Unfollow</button>';
+            } else {
+                actionButtons += ` <button class="btn btn-secondary" onclick="followCircle(${circleId})">Follow</button>`;
+            }
+            
+            // Load circle content (resources, tasks, chat)
+            const content = document.getElementById('modalCircleContent');
+            content.innerHTML = `
+                <p>${currentCircle.description}</p>
+                <div style="margin: 20px 0;">
+                    ${actionButtons}
+                </div>
+                
+                <div class="tabs" style="margin-top: 20px;">
+                    <div class="tab active" onclick="event.stopPropagation(); switchCircleTab('resources')">Resources</div>
+                    <div class="tab" onclick="event.stopPropagation(); switchCircleTab('tasks')">Tasks</div>
+                    <div class="tab" onclick="event.stopPropagation(); switchCircleTab('chat')">Chat</div>
+                </div>
+                
+                <div id="circleResources" class="circle-tab-content"></div>
+                <div id="circleTasks" class="circle-tab-content hidden"></div>
+                <div id="circleChat" class="circle-tab-content hidden"></div>
+            `;
+            
+            modal.classList.add('active');
+            loadCircleResources(circleId);
+        }
+
+        function switchCircleTab(tab) {
+            document.querySelectorAll('.circle-tab-content').forEach(c => c.classList.add('hidden'));
+            document.querySelectorAll('#circleModal .tabs .tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (tab === 'resources') {
+                document.getElementById('circleResources').classList.remove('hidden');
+                loadCircleResources(currentCircle.id);
+            } else if (tab === 'tasks') {
+                document.getElementById('circleTasks').classList.remove('hidden');
+                loadCircleTasks(currentCircle.id);
+            } else if (tab === 'chat') {
+                document.getElementById('circleChat').classList.remove('hidden');
+                loadCircleChat(currentCircle.id);
+            }
+        }
+
+        async function joinCircle(circleId) {
+            await fetch(`/api/circles/${circleId}/join`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({user_id: currentUser.id})
+            });
+            alert('Joined successfully!');
+        }
+
+        async function followCircle(circleId) {
+            await fetch(`/api/circles/${circleId}/follow`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({user_id: currentUser.id})
+            });
+            alert('Following this circle!');
+            openCircle(circleId); // Refresh to show unfollow button
+        }
+
+        async function unfollowCircle(circleId) {
+            await fetch(`/api/circles/${circleId}/unfollow`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({user_id: currentUser.id})
+            });
+            alert('Unfollowed successfully!');
+            openCircle(circleId); // Refresh to show follow button
+        }
+
+        async function loadCircleResources(circleId) {
+            const response = await fetch(`/api/circles/${circleId}/resources`);
+            const resources = await response.json();
+            
+            let html = '';
+            
+            if (currentUser.role === 'creator' && currentCircle.creator_id === currentUser.id) {
+                html += `
+                    <div style="background: white; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+                        <h4>Add Resource</h4>
+                        <select id="resourceType" onchange="toggleResourceInput()">
+                            <option value="link">External Link</option>
+                            <option value="video">Video Link</option>
+                            <option value="pdf">PDF File</option>
+                        </select>
+                        <input type="text" id="resourceTitle" placeholder="Resource title" style="width: 100%; margin: 10px 0; padding: 8px;">
+                        <input type="text" id="resourceContent" placeholder="Enter URL" style="width: 100%; margin: 10px 0; padding: 8px;">
+                        <input type="file" id="resourceFile" accept=".pdf" style="width: 100%; margin: 10px 0; padding: 8px; display: none;">
+                        <button class="btn btn-primary" onclick="addResource()">Add Resource</button>
+                    </div>
+                `;
+            }
+            
+            html += resources.map(r => `
+                <div class="resource-item">
+                    <div>
+                        <strong>${r.title}</strong>
+                        <p style="font-size: 12px; color: #666;">${r.resource_type} • ${r.view_count} views</p>
+                    </div>
+                    <button class="btn btn-secondary" onclick="viewResource(${r.id}, '${r.content}', '${r.resource_type}')">View</button>
+                </div>
+            `).join('');
+            
+            document.getElementById('circleResources').innerHTML = html;
+        }
+
+        function toggleResourceInput() {
+            const type = document.getElementById('resourceType').value;
+            const contentInput = document.getElementById('resourceContent');
+            const fileInput = document.getElementById('resourceFile');
+            
+            if (type === 'pdf') {
+                contentInput.style.display = 'none';
+                fileInput.style.display = 'block';
+            } else {
+                contentInput.style.display = 'block';
+                fileInput.style.display = 'none';
+            }
+        }
+
+        async function addResource() {
+            const title = document.getElementById('resourceTitle').value;
+            const type = document.getElementById('resourceType').value;
+            
+            if (type === 'pdf') {
+                const fileInput = document.getElementById('resourceFile');
+                const file = fileInput.files[0];
+                
+                if (!file) {
+                    alert('Please select a PDF file');
+                    return;
+                }
+                
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('title', title);
+                formData.append('circle_id', currentCircle.id);
+                formData.append('creator_id', currentUser.id);
+                
+                await fetch('/api/resources/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+            } else {
+                const content = document.getElementById('resourceContent').value;
+                
+                await fetch('/api/resources', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        title, content,
+                        resource_type: type,
+                        circle_id: currentCircle.id,
+                        creator_id: currentUser.id
+                    })
+                });
+            }
+            
+            alert('Resource added!');
+            loadCircleResources(currentCircle.id);
+        }
+
+        async function viewResource(resourceId, content, type) {
+            await fetch(`/api/resources/${resourceId}/view`, {method: 'POST'});
+            
+            if (type === 'link' || type === 'video') {
+                window.open(content, '_blank');
+            } else if (type === 'pdf') {
+                window.open(`/uploads/${content}`, '_blank');
+            }
+        }
+
+        async function loadCircleTasks(circleId) {
+            try {
+                const response = await fetch(`/api/circles/${circleId}/tasks`);
+                const tasks = await response.json();
+                
+                console.log('Tasks loaded:', tasks); // Debug log
+                
+                let html = '';
+                
+                // Only show the form if user is creator of this circle
+                if (currentUser.role === 'creator' && currentCircle.creator_id === currentUser.id) {
+                    html += `
+                        <div style="background: #f0f9ff; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 2px solid #667eea;">
+                            <h4 style="color: #667eea; margin-bottom: 15px;">📝 Add New Task</h4>
+                            <div style="margin-bottom: 10px;">
+                                <label style="display: block; margin-bottom: 5px; font-weight: bold;">Task Title</label>
+                                <input type="text" id="taskTitle" placeholder="e.g., Complete Chapter 1 Assignment" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                            </div>
+                            <div style="margin-bottom: 10px;">
+                                <label style="display: block; margin-bottom: 5px; font-weight: bold;">Description</label>
+                                <textarea id="taskDesc" placeholder="Provide details about the task..." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; min-height: 80px;"></textarea>
+                            </div>
+                            <div style="margin-bottom: 15px;">
+                                <label style="display: block; margin-bottom: 5px; font-weight: bold;">Due Date & Time</label>
+                                <input type="datetime-local" id="taskDue" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                            </div>
+                            <button class="btn btn-primary" onclick="addTask()" style="width: 100%;">➕ Add Task</button>
+                        </div>
+                    `;
+                }
+                
+                // Show tasks for everyone (creators and students)
+                if (tasks.length === 0) {
+                    html += '<div style="text-align: center; padding: 40px; background: white; border-radius: 8px;"><p style="color: #999; font-size: 16px;">📋 No tasks available yet</p></div>';
+                } else {
+                    html += '<div style="margin-bottom: 15px;"><h4 style="color: white; margin-bottom: 15px;">📋 Available Tasks</h4></div>';
+                    html += tasks.map(t => {
+                        const dueDate = new Date(t.due_date);
+                        const isOverdue = dueDate < new Date();
+                        const taskTitle = t.title || 'Untitled Task';
+                        const taskDesc = t.description || 'No description provided';
+                        
+                        return `
+                            <div style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid ${isOverdue ? '#f56565' : '#667eea'}; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                <h3 style="color: #333; margin-bottom: 10px; font-size: 18px; font-weight: bold;">${taskTitle}</h3>
+                                <p style="color: #555; margin-bottom: 15px; line-height: 1.6; white-space: pre-wrap;">${taskDesc}</p>
+                                <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 15px; padding: 10px; background: #f7fafc; border-radius: 5px;">
+                                    <span style="font-size: 14px; color: #666;">
+                                        📅 <strong>Due:</strong> ${dueDate.toLocaleDateString()} at ${dueDate.toLocaleTimeString()}
+                                    </span>
+                                    <span style="font-size: 14px; color: #48bb78;">
+                                        ✓ <strong>${t.completion_count || 0}</strong> students completed
+                                    </span>
+                                    ${isOverdue ? '<span style="font-size: 14px; color: #f56565; font-weight: bold;">⚠️ OVERDUE</span>' : ''}
+                                </div>
+                                ${currentUser.role === 'student' ? `
+                                    <button class="btn btn-secondary" onclick="completeTask(${t.id})" style="width: 100%; padding: 12px; font-size: 16px;">
+                                        ✓ Mark as Complete
+                                    </button>
+                                ` : ''}
+                            </div>
+                        `;
+                    }).join('');
+                }
+                
+                document.getElementById('circleTasks').innerHTML = html;
+            } catch (error) {
+                console.error('Error loading tasks:', error);
+                document.getElementById('circleTasks').innerHTML = '<p style="color: red;">Error loading tasks. Please try again.</p>';
+            }
+        }
+
+        async function addTask() {
+            const title = document.getElementById('taskTitle').value;
+            const description = document.getElementById('taskDesc').value;
+            const due_date = document.getElementById('taskDue').value;
+            
+            if (!title || !description || !due_date) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/tasks', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        title, 
+                        description, 
+                        due_date,
+                        circle_id: currentCircle.id
+                    })
+                });
+                
+                if (response.ok) {
+                    alert('Task added successfully!');
+                    document.getElementById('taskTitle').value = '';
+                    document.getElementById('taskDesc').value = '';
+                    document.getElementById('taskDue').value = '';
+                    loadCircleTasks(currentCircle.id);
+                } else {
+                    const error = await response.json();
+                    alert('Error adding task: ' + JSON.stringify(error));
+                }
+            } catch (error) {
+                alert('Error adding task: ' + error.message);
+                console.error('Task creation error:', error);
+            }
+        }
+
+        async function completeTask(taskId) {
+            await fetch(`/api/tasks/${taskId}/complete`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({user_id: currentUser.id})
+            });
+            
+            alert('Task completed! Points awarded to creator.');
+            loadCircleTasks(currentCircle.id);
+        }
+
+        async function loadCircleChat(circleId) {
+            const response = await fetch(`/api/circles/${circleId}/messages`);
+            const messages = await response.json();
+            
+            const html = `
+                <div class="chat-container">
+                    <div class="messages-list" id="messagesList">
+                        ${messages.map(m => `
+                            <div class="message">
+                                <strong>${m.username}</strong>
+                                <p>${m.text}</p>
+                                <small style="color: #666;">${new Date(m.timestamp).toLocaleString()}</small>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="messageInput" placeholder="Type a message..." style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                        <button class="btn btn-primary" onclick="sendMessage()">Send</button>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('circleChat').innerHTML = html;
+        }
+
+        async function sendMessage() {
+            const text = document.getElementById('messageInput').value;
+            
+            await fetch(`/api/circles/${currentCircle.id}/messages`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({text, user_id: currentUser.id})
+            });
+            
+            document.getElementById('messageInput').value = '';
+            loadCircleChat(currentCircle.id);
+        }
+
+        async function loadMyCircles() {
+            const response = await fetch(`/api/users/${currentUser.id}/profile`);
+            const profile = await response.json();
+            
+            const grid = document.getElementById('myCirclesGrid');
+            
+            if (currentUser.role === 'creator') {
+                grid.innerHTML = profile.created_circles.map(circle => `
+                    <div class="circle-card" onclick="openCircle(${circle.id})">
+                        <h3>${circle.title}</h3>
+                        <p style="color: #666;">Members: ${circle.member_count}</p>
+                    </div>
+                `).join('');
+            } else {
+                grid.innerHTML = profile.followed_circles.map(circle => `
+                    <div class="circle-card" onclick="openCircle(${circle.id})">
+                        <h3>${circle.title}</h3>
+                    </div>
+                `).join('');
+            }
+        }
+
+        async function loadProfile() {
+            const response = await fetch(`/api/users/${currentUser.id}/profile`);
+            const profile = await response.json();
+            
+            const info = document.getElementById('profileInfo');
+            info.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 30px;">
+                    <div style="width: 80px; height: 80px; background: #667eea; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 32px; font-weight: bold;">
+                        ${profile.username.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                        <h3>${profile.username}</h3>
+                        <p style="color: #666;">${profile.email}</p>
+                        <span class="reputation-level">Level ${profile.reputation_level}</span>
+                    </div>
+                </div>
+                
+                <div class="profile-stats">
+                    <div class="stat-card">
+                        <h4>${profile.points}</h4>
+                        <p>Total Points</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>${profile.reputation_level}</h4>
+                        <p>Reputation Level</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>${profile.followed_circles.length}</h4>
+                        <p>Followed Circles</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>${currentUser.role === 'creator' ? profile.created_circles.length : profile.completed_tasks_count}</h4>
+                        <p>${currentUser.role === 'creator' ? 'Created Circles' : 'Tasks Completed'}</p>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">
+                        ${currentUser.role === 'creator' ? 'My Circles' : 'Followed Circles'}
+                    </h3>
+                    <div class="circles-grid">
+                        ${(currentUser.role === 'creator' ? profile.created_circles : profile.followed_circles).map(circle => `
+                            <div class="circle-card" onclick="openCircle(${circle.id})">
+                                <h3>${circle.title}</h3>
+                                ${circle.member_count ? `<p style="color: #666;">Members: ${circle.member_count}</p>` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function closeModal() {
+            document.getElementById('circleModal').classList.remove('active');
+            currentCircle = null;
+        }
+
+        // Close modal on outside click
+        document.getElementById('circleModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
